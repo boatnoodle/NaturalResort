@@ -22,6 +22,7 @@
                         <table class="table table-bordered table-hover reportDaily">
                             <thead>
                                 <tr>
+                                    <th>COUPON ID</th>
                                     <th>AGENT</th>
                                     <th>ROOM</th>
                                     <th>CHECK IN</th>
@@ -36,6 +37,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="data in datas">
+                                    <td>\{{ data.couponId || '-' }}</td>
                                     <td>\{{ data.agentName || '-' }}</td>
                                     <td>\{{ data.roomNo || '-' }}</td>
                                     <td>\{{ data.checkIn || '-' }}</td>

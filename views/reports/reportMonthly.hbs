@@ -38,7 +38,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="data in obj">
+                                <template v-show="obj.length > 0" v-for="data in obj">
                                     <tr>
                                         <td>\{{ data.date }}</td>
                                         <td>\{{ data.totalPax }}</td>
@@ -62,6 +62,9 @@
                                         </table>
                                     </tr>
                                 </template>
+                                <tr v-show="obj.length <= 0">
+                                    <td colspan="3">ไม่มีข้อมูล</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

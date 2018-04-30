@@ -24,8 +24,8 @@ $(function() {
       },
       yearOld: [],
       optionSearch: {
-        month: '04',
-        year: '2018'
+        month: moment().format('MM'),
+        year: moment().format('Y')
       }
     },
     methods: {
@@ -53,13 +53,14 @@ $(function() {
             this.arr[element.created] = [element];
           }
         });
-        var month = '04';
-        var year = '2018'
+        var month = this.optionSearch.month;
+        var year = this.optionSearch.year;
         var day = daysInMonth(month,year);
         var start = new Date(`${month}/01/${year}`);
         var end = new Date(`${month}/${day}/${year}`);
         
         var loop = new Date(start);
+        this.obj = []
         while(loop <= end){
           var className = 'detail' + moment(loop).format('D');
           var loopDate = moment(loop).format('Y-MM-DD');

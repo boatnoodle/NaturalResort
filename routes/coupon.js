@@ -80,7 +80,7 @@ router.post("/addCoupon", function(req, res, next) {
 });
 
 router.get("/getLastedCoupon", function(req, res, next) {
-  var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId WHERE 1 AND type = 1  ORDER BY  couponDetail.couponId DESC LIMIT 0,5`;
+  var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId WHERE 1 AND type = 1  ORDER BY  couponDetail.couponId DESC`;
   db.query(sql, function(err, rows) {
     if (err) {
       throw err;

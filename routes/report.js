@@ -10,7 +10,7 @@ router.get('/reportMonthly', function(req, res, next) {
     res.render('reports/reportMonthly');
 })
 
-router.get('/getDataReportDaily', reportController.getDataReportDaily);
+router.post('/getDataReportDaily', reportController.getDataReportDaily);
 
 router.post('/getDataReportMonthly', reportController.getDataReportMonthly)
 module.exports = router;

@@ -5,20 +5,25 @@ $(function() {
       datas: [],
       isReprint: false,
       reprintClass: 'reprintClass',
-      normalClass: 'normalClass'
+      normalClass: 'normalClass',
+      optionSearch:{
+        date: moment().format('Y-MM-DD')
+      } 
     },
     methods: {
       async getDailyReport(){
-        await axios.get('http://localhost:5000/report/getDataReportDaily')
+        await axios.post('http://localhost:5000/report/getDataReportDaily',this.optionSearch)
         .then((result) => {
           this.datas = result.data
+          $(".reportDaily").dataTable().fnDestroy()
         })
         .catch((err) => {
           console.log(err);
         })
-        $(".dataTable").DataTable({
+        $(".reportDaily").DataTable({
+          bDestroy: true,
           order: [[0, "ASC"]],
-          lengthMenu: [[15,20,25, 50, -1], [15,20,25, 50, "All"]],
+          lengthMenu: [[10,20,25, 50, -1], [10,20,25, 50, "All"]],
         })
       },
       getType(val){

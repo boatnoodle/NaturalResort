@@ -8,11 +8,18 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="box">
-                    <div class="box-header">
+                    {{!-- <div class="box-header">
                         <h3 class="box-title text-center">รายงานประจำวันที่ \{{ getDateToday() }}</h3>
-                    </div>
+                    </div> --}}
                     <div class="box-body">
-                        <table class="table table-bordered table-hover dataTable">
+                        <form v-on:submit.prevent="getDailyReport" class="form-inline text-center" style="margin: 15px 0;">
+                            <div class="form-group">
+                                <label>DATE:</label>
+                                <input v-model="optionSearch.date" type="date" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-success">SEARCH</button>
+                        </form>
+                        <table class="table table-bordered table-hover reportDaily">
                             <thead>
                                 <tr>
                                     <th>AGENT</th>
@@ -48,7 +55,7 @@
         </div>
     </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="/myJs/report.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>

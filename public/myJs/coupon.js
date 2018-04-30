@@ -121,15 +121,20 @@ $(function() {
                     console.log(err)
                 })
             },
-            getLastedCoupon(){
-                axios.get('http://localhost:5000/coupon/getLastedCoupon')
+            async getLastedCoupon(){
+                await axios.get('http://localhost:5000/coupon/getLastedCoupon')
                 .then((result) => {
-                    console.log('fetch lasted coupon')
                     this.lastedCoupons = result.data;
+                    $("#recentCoupon").dataTable().fnDestroy()
                 })
                 .catch((err) => {
                     console.log(err)
                 })
+                $("#recentCoupon").DataTable({
+                    bDestroy: true,
+                    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "All"]],
+                    order: [[0, "DESC"]]
+                  });
             },
             totalDate(){
                 if(this.data.checkIn != '' && this.data.checkOut != ''){

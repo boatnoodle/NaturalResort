@@ -1,0 +1,24 @@
+body{
+    font-family: 'Kanit', sans-serif !important;
+}
+h1,h2,h3,h4,h5,h6{
+    font-family: 'Kanit', sans-serif !important;
+}
+.couponEx{
+    line-height: 2;
+}
+.couponEx h4{
+    line-height: 2;
+}
+.couponEx .couponDate{
+    padding: 20px;
+    display: table;
+    margin: 20px auto;
+    border: 1px solid;
+}
+.reprintClass{
+    color: red;
+}
+.normalClass{
+    color: green;
+}

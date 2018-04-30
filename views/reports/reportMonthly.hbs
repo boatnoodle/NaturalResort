@@ -1,0 +1,76 @@
+<div id="app">
+    <section class="content-header">
+        <h3 class="text-center">
+            <i class="fa fa-book"></i> COUPON ISSUE BY MONTHLY
+        </h3>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    {{!-- <div class="box-header">
+                        <h3 class="box-title text-center">MONTH/YEAR </h3>
+                    </div> --}}
+                    <div class="box-body">
+                        <form v-on:submit.prevent="searchReport" class="form-inline text-center" style="margin: 15px 0;">
+                            <div class="form-group">
+                                <label>MONTH:</label>
+                                <select v-model="optionSearch.month" class="form-control" required="true">
+                                    <option value="">Select Month</option>
+                                    <option v-for="(data,index) in objMonths.nameMonth" :value="objMonths.value[index]">\{{ data }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>YEAR: </label>
+                                <select v-model="optionSearch.year" class="form-control" required="true">
+                                    <option value="">Select Year</option>
+                                    <option v-for="data in yearOld" :value="data">\{{ data }}</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-success">SEARCH</button>
+                        </form>
+                        <table class="table table-bordered table-hover text-center">
+                            <thead>
+                                <tr>
+                                    <th>DATE</th>
+                                    <th>TOTAL PAX</th>
+                                    <th>DETAIL</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template v-for="data in obj">
+                                    <tr>
+                                        <td>\{{ data.date }}</td>
+                                        <td>\{{ data.totalPax }}</td>
+                                        <td>
+                                            <button v-show="data.arr.length > 0" @click="openDetail(data.nameClass)" class="btn btn-success btn-sm">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                            <span v-show="data.arr.length <= 0">ไม่มีข้อมูล</span>
+                                        </td>
+                                        <table>
+                                            <tr :class="data.nameClass" style="background: yellow; display: none;">
+                                                <th>DATE</th>
+                                                <th>AGENT NAME</th>
+                                                <th>TOTAL PAX</th>
+                                            </tr>
+                                            <tr :class="data.nameClass" style="background: #b5f7a6; display: none;" v-for="data2 in data.arr">
+                                                <td>\{{ data.date }}</td>
+                                                <td>\{{ data2.agentName }}</td>
+                                                <td>\{{ data2.totalPax }}</td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/myJs/reportMonthly.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>

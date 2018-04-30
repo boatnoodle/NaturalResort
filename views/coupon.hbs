@@ -1,0 +1,213 @@
+<div id="app">
+    <div v-if="status" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <strong>\{{ status }}</strong>
+    </div>
+    <section class="content-header">
+        <h1>ออกคูปอง</h1>
+        {{!--
+        <small>Version 1.0</small> --}}
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-ticket"></i> ออกคูปอง</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" v-on:submit.prevent="submit">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <h5 style="line-height: 2">
+                                    Running number Start: \{{ data.runNoStart }}
+                                    <br> Running number End: \{{ runNoEnd || 'ยังไม่ระบุ' }}
+                                </h5>
+                            </div>
+                            <div class="form-group">
+                                <label>Agent</label>
+                                <select id="agent" ref="agent" class="form-control" v-model="data.agent">
+                                    <option value="">Select Agent</option>
+                                    <option v-for="data in datas" :value="data">\{{ data.agentName }}</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Room Number</label>
+                                <input v-model="data.roomNo" type="number" class="form-control" placeholder="Enter Room Number">
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>CheckIn Date</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input v-model="data.checkIn" type="date" class="form-control pull-right" id="checkIn" placeholder="Select Date checkIn">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>CheckOut Date</label>
+                                        <div class="input-group date">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar"></i>
+                                            </div>
+                                            <input v-model="data.checkOut" type="date" class="form-control pull-right" id="checkOut" placeholder="Select Date checkOut">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>Total Dates</label>
+                                        <input :value="totalDate" type="number" readonly class="form-control" placeholder="Total Dates">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label>Pax</label>
+                                        <input v-model="data.pax" type="number" class="form-control" placeholder="Enter Pax">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Remarks</label>
+                                <textarea v-model="data.remarks" class="form-control" cols="30" rows="5" placeholder="Remark..."></textarea>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-primary">บันทึก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-list"></i> ข้อมูลการออกใบเสร็จ
+                        </h3>
+                    </div>
+                    <div class="box-body" style="line-height: 2;">
+                        <div>
+                            <label for="">Running Number Start: </label> \{{ data.runNoStart }}
+                        </div>
+                        <div>
+                            <label for="">Running Number End: </label> \{{ runNoEnd || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Agent: </label> \{{ data.agent.agentName || 'ยังไม่ระบุ' }}
+                            <span style="float: right">
+                                <label for="">จำนวนที่พิมพ์ทั้งหมด: </label> \{{ (totalDate * data.pax) || 'ยังไม่ระบุ' }}
+                            </span>
+                        </div>
+                        <div>
+                            <label for="">Room No: </label> \{{ data.roomNo || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Check in: </label> \{{ data.checkIn || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Check out: </label> \{{ data.checkOut || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Nights: </label> \{{ totalDate || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Pax: </label> \{{ data.pax || 'ยังไม่ระบุ' }}
+                        </div>
+                        <div>
+                            <label for="">Remarks: </label> \{{ data.remarks || 'ยังไม่ระบุ' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-file-text-o"></i> ตัวอย่างคูปอง</h3>
+                    </div>
+                    <div class="box-body text-center">
+                        <div id="section-to-print" class="couponEx">
+                            <h3>The Natural Resort</h3>
+                            <p class="text-right">No.
+                                <span id="runNo">xxxxxxxxxxxx</span>
+                            </p>
+                            <h4>
+                                COUPON BREAKFAST
+                                <br> START TIME 06.00AM - 11.00AM
+                            </h4>
+                            <h4 class="couponDate">DATE
+                                <span id="date">XX/XX/XXXX</span>
+                            </h4>
+                            <h4>ROOM \{{ data.roomNo || 'xxx' }}</h4>
+                            <p>
+                                Please use coupon at the
+                                <br> same as print out on coupon date
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-list-ul"></i> รายการล่าสุด
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>AGENT</th>
+                                    <th>ROOM</th>
+                                    <th>CHECK IN</th>
+                                    <th>CHECK OUT</th>
+                                    <th>NIGHT</th>
+                                    <th>PAX</th>
+                                    <th>COUPON NO FROM</th>
+                                    <th>COUPON NO TO</th>
+                                    <th>REMARK</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in lastedCoupons">
+                                    <td>\{{ data.agentName }}</td>
+                                    <td>\{{ data.roomNo }}</td>
+                                    <td>\{{ getStringDate(data.checkIn) }}</td>
+                                    <td>\{{ getStringDate(data.checkOut) }}</td>
+                                    <td>\{{ data.totalDate }}</td>
+                                    <td>\{{ data.pax }}</td>
+                                    <td>\{{ data.runNoStart }}</td>
+                                    <td>\{{ data.runNoEnd }}</td>
+                                    <td>\{{ data.remarks || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<link rel="stylesheet" href="/css/print.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="/myJs/coupon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+
+<script>
+    $(function () {
+        //Date picker
+
+    })
+</script>

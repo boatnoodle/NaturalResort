@@ -1,0 +1,162 @@
+<div id="app">
+    <section class="content-header">
+        <h1>ออกคูปองใหม่</h1>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-refresh"></i> ออกคูปองใหม่่</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <form role="form" v-on:submit.prevent="searchCoupon" class="form-inline text-center">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="">Running number Start : </label>
+                                <input v-model="data.runNoStart" type="number" class="form-control" placeholder="Enter run no from..." required="true">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Running number End : </label>
+                                <input v-model="data.runNoEnd" type="number" class="form-control" placeholder="Enter run no End." required="true">
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer text-center">
+                            <button type="submit" class="btn btn-primary">ค้นหา</button>
+                        </div>
+                    </form>
+                </div>
+                <div v-if="status" class="alert alert-success alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <strong>\{{ status }}</strong>
+                </div>
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-search"></i> รายการคูปองที่ค้นเจอ
+                        </h3>
+                    </div>
+                    <div class="box-body">
+                        <div v-show="datas.length > 0" class="form-horizontal">
+                            <form class="form-group" v-on:submit.prevent="rePrint">
+                                <label for="" class="col-sm-3 control-label">เหตุผลในการออกใหม่: </label>
+                                <div class="col-sm-7">
+                                    <input v-model="dataReprint.remark" type="text" class="form-control" placeholder="ระบุเหตุผลในการออกคูปองใหม่" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="fa fa-print"></i> พิมพ์
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <table class="table table-bordered table-hover searchReprint">
+                            <thead>
+                                <tr>
+                                    <th><input v-show="datas.length > 0" type="checkbox" v-model="selectAll"> เลือกทั้งหมด </th>
+                                    <th>RUNNING NO.</th>
+                                    <th>AGENT</th>
+                                    <th>ROOM</th>
+                                    <th>DATE</th>
+                                    <th>#</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="datas.length > 0" v-for="data in datas">
+                                    <td>
+                                        <input type="checkbox" v-model="selected" :value="data">
+                                    </td>
+                                    <td>\{{ data.runNo }}</td>
+                                    <td>\{{ data.agentName }}</td>
+                                    <td>\{{ data.roomNo }}</td>
+                                    <td>\{{ getStringDate(data.date) }}</td>
+                                    <td>
+                                        <button @click="viewCouponEx(data)" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-file-text-o"></i> ดูตัวอย่าง</button>
+                                    </td>
+                                </tr>
+                                {{!-- <tr v-if="datas.length <= 0" class="text-center">
+                                    <td colspan="6">ไม่มีข้อมูล</td>
+                                </tr> --}}
+                            </tbody>
+                        </table>
+                        {{!-- <h4 v-show="datas == 0 && data.runNoStart == ''" class="text-center">ยังไม่มีการค้นหา</h4> --}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="box box-danger">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">
+                            <i class="fa fa-file-text-o"></i> ตัวอย่างคูปอง</h3>
+                    </div>
+                    <div class="box-body text-center">
+                        <div id="section-to-print" class="couponEx">
+                            <h3>The Natural Resort</h3>
+                            <p class="text-right">No.
+                                <span id="runNo"></span>
+                            </p>
+                            <h4>
+                                COUPON BREAKFAST
+                                <br> START TIME 06.00AM - 11.00AM
+                            </h4>
+                            <h4 class="couponDate">DATE
+                                <span id="date"></span>
+                            </h4>
+                            <h4>ROOM
+                                <span id="roomNo"></span>
+                            </h4>
+                            <p>
+                                Please use coupon at the
+                                <br> same as print out on coupon date
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box box-success">
+                    <div class="box-header">
+                        <h3 class="box-title">
+                            <i class="fa fa-list-ul"></i> รายการออกคูปองใหม่</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered table-hover rePrint">
+                            <thead>
+                                <tr>
+                                    <th>COUPON ID</th>
+                                    <th>RUNNING NO FROM</th>
+                                    <th>RUNNING NO TO</th>
+                                    <th>REMARKS</th>
+                                    <th>CREATED</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in dataReprints">
+                                    <td>\{{ data.couponId }}</td>
+                                    <td>\{{ data.runNoStart }}</td>
+                                    <td>\{{ data.runNoEnd }}</td>
+                                    <td>\{{ data.remarks }}</td>
+                                    <td>\{{ data.created }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<link rel="stylesheet" href="/css/print.css">
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="/myJs/rePrintCoupon.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>

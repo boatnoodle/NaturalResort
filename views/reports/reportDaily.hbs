@@ -1,0 +1,54 @@
+<div id="app">
+    <section class="content-header">
+        <h3 class="text-center">
+            <i class="fa fa-book"></i> DAILY COUPON ISSUE REPORT
+        </h3>
+    </section>
+    <section class="content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title text-center">รายงานประจำวันที่ \{{ getDateToday() }}</h3>
+                    </div>
+                    <div class="box-body">
+                        <table class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th>AGENT</th>
+                                    <th>ROOM</th>
+                                    <th>CHECK IN</th>
+                                    <th>CHECK OUT</th>
+                                    <th>NIGHT</th>
+                                    <th>PAX</th>
+                                    <th>COUPON NO FROM</th>
+                                    <th>COUPON NO TO</th>
+                                    <th>TYPE</th>
+                                    <th>REMARK</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in datas">
+                                    <td>\{{ data.agentName || '-' }}</td>
+                                    <td>\{{ data.roomNo || '-' }}</td>
+                                    <td>\{{ data.checkIn || '-' }}</td>
+                                    <td>\{{ data.checkOut || '-' }}</td>
+                                    <td>\{{ data.totalDate || '-' }}</td>
+                                    <td>\{{ data.pax || '-' }}</td>
+                                    <td>\{{ data.runNoStart || '-' }}</td>
+                                    <td>\{{ data.runNoEnd || '-' }}</td>
+                                    <td :class="[data.type == 2 ? reprintClass: normalClass]">\{{ getType(data.type) }}</td>
+                                    <td>\{{ data.remarks || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/myJs/report.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>

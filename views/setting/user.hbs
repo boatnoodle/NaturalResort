@@ -1,0 +1,202 @@
+{{#if status.error }}
+<div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{ status.error }}</strong>
+</div>
+{{/if}} 
+{{#if status.success}}
+<div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{ status.success }}</strong>
+</div>
+{{/if}}
+
+<section class="content-header">
+    <h3>
+        <i class="fa fa-user"></i> ตั้งค่าผู้ใช้</h3>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">ผู้ใช้ระบบ</h3>
+                    <div class="pull-right">
+                        <button data-toggle="modal" data-target="#modalUser" class="btn btn-primary">
+                            <i class="fa fa-plus-circle"></i> เพิ่ม
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ชื่อผู้ใช้</th>
+                                <th>ชื่อ</th>
+                                <th>สถานะ</th>
+                                <th class="text-center">จัดการ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each data}}
+                            <tr>
+                                <td>{{ userId }}</td>
+                                <td>{{ username }}</td>
+                                <td>{{ name }}</td>
+                                <td>{{ status }}</td>
+                                <td class="text-center" width="15%">
+                                    <a data-target="#modalUpdateUser" data-toggle="modal" data-id="{{ userId }}" class="btn btn-warning btn-sm updateUser">
+                                        <i class="fa fa-pencil"></i> แก้ไข
+                                    </a>
+                                    <a href="/setting/deleteUser/{{ userId }}" onclick="return confirm('คุณต้องการลบผู้ใช้นี้หรือไม่?')" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-close"></i> ลบ
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{{!-- modal add user --}}
+<div id="modalUser" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-plus-circle"></i> เพิ่มผู้ใช้ระบบ</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/setting/addUser" method="POST" onsubmit="return checkPassword()">
+                    <div class="form-group">
+                        <label for="">ชื่อผู้ใช้</label>
+                        <input type="text" name="username" class="form-control" placeholder="กรุณาใส่ชื่อผู้ใช้" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="">รหัสผ่าน</label>
+                        <input id="password" onkeyup="checkPassword()" type="password" name="password" class="form-control" placeholder="กรุณาใส่รหัสผ่าน"
+                            required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="">ยืนยันรหัสผ่าน</label>
+                        <input id="rePassword" onkeyup="checkPassword()" type="password" class="form-control" placeholder="ยืนยันรหัสผ่าน" required="true">
+                        <small id="msgPassword" style="color: red; display: none;">กรุณาใส่รหัสผ่านให้ครงกัน</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="">ชื่อ-นามสกุล</label>
+                        <input type="text" name="name" class="form-control" placeholder="กรุณาใส่ชื่อ-นามสกุล" required="true">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{!-- modal update --}}
+<div id="modalUpdateUser" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-pencil"></i> แก้ไขผู้ใช้ระบบ</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/setting/updateUser" method="POST" onsubmit="return checkPassword()">
+                    <input id="userIdUpdate" type="hidden" name="userId" value="">
+                    <div class="form-group">
+                        <label for="">ชื่อผู้ใช้</label>
+                        <input id="usernameUpdate" type="text" name="username" class="form-control" placeholder="กรุณาใส่ชื่อผู้ใช้" required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="">รหัสผ่าน</label>
+                        <input id="passwordUpdate" onkeyup="checkUpdatePassword()" type="password" name="password" class="form-control" placeholder="กรุณาใส่รหัสผ่าน"
+                            required="true">
+                    </div>
+                    <div class="form-group">
+                        <label for="">ยืนยันรหัสผ่าน</label>
+                        <input id="rePasswordUpdate" onkeyup="checkUpdatePassword()" type="password" class="form-control" placeholder="ยืนยันรหัสผ่าน"
+                            required="true">
+                        <small id="msgPasswordUpdate" style="color: red; display: none;">กรุณาใส่รหัสผ่านให้ครงกัน</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="">ชื่อ-นามสกุล</label>
+                        <input id="nameUpdate" type="text" name="name" class="form-control" placeholder="กรุณาใส่ชื่อ-นามสกุล" required="true">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.dataTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+
+        $(".updateUser").click(function () {
+            var userId = $(this).data('id')
+            $.ajax({
+                url: '/setting/getUserById/' + userId,
+                method: 'GET',
+                success: function (obj) {
+                    $("#userIdUpdate").val(obj.userId);
+                    $("#usernameUpdate").val(obj.username);
+                    $("#passwordUpdate").val(obj.password);
+                    $("#rePasswordUpdate").val(obj.password);
+                    $("#nameUpdate").val(obj.name);
+                }
+            })
+        })
+    })
+    function checkPassword() {
+        var password = $("#password").val(),
+            rePassword = $("#rePassword").val();
+
+        if (password != rePassword) {
+            $("#msgPassword").show();
+            return false;
+        } else {
+            $("#msgPassword").hide();
+            return true;
+        }
+    }
+    function checkUpdatePassword() {
+        var password = $("#passwordUpdate").val(),
+            rePassword = $("#rePasswordUpdate").val();
+
+        if (password != rePassword) {
+            $("#msgPasswordUpdate").show();
+            return false;
+        } else {
+            $("#msgPasswordUpdate").hide();
+            return true;
+        }
+    }
+</script>

@@ -1,0 +1,139 @@
+{{#if status.success }}
+<div class="alert alert-success alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{ status.success }}</strong>
+</div>
+{{/if}}
+{{#if status.error}}
+<div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <strong>{{ status.error }}</strong>
+</div>
+{{/if}}
+
+<section class="content-header">
+    <h3>
+        <i class="fa fa-users"></i> ตั้งค่า Agents</h3>
+</section>
+<section class="content">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title">Agents</h3>
+                    <div class="pull-right">
+                        <button data-toggle="modal" data-target="#modalAgents" class="btn btn-primary">
+                            <i class="fa fa-plus-circle"></i> เพิ่ม
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <table class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ชื่อ</th>
+                                <td class="text-center">จัดการ</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each data}}
+                            <tr>
+                                <td>{{ agentId }}</td>
+                                <td>{{ agentName }}</td>
+                                <td width="15%" class="text-center">
+                                    <a data-toggle="modal" data-target="#modalUpdateAgent" data-id="{{ agentId }}" class="btn btn-warning btn-sm updateAgent">
+                                        <i class="fa fa-pencil"></i> แก้ไข
+                                    </a>
+                                    <a href="/setting/deleteAgent/{{ agentId }}" onclick="return confirm('คุณต้องการลบตัวแทนนี้หรือไม่ ?')" class="btn btn-danger btn-sm">
+                                        <i class="fa fa-close"></i> ลบ
+                                    </a>
+                                </td>
+                            </tr>
+                            {{/each }}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="modalAgents" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-plus-circle"></i> เพิ่ม Agent</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/setting/addAgent" method="POST">
+                    <div class="form-group">
+                        <label for="">ชื่อ Agent</label>
+                        <input type="text" name="agentName" class="form-control" placeholder="กรุณาใส่ชื่อ Agent">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="modalUpdateAgent" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">
+                    <i class="fa fa-pencil"></i> แก้ไข Agent</h4>
+            </div>
+            <div class="modal-body">
+                <form action="/setting/updateAgent" method="POST">
+                    <input id="agentId" type="hidden" name="agentId" value="">
+                    <div class="form-group">
+                        <label for="">ชื่อ Agent</label>
+                        <input id="agentUpdateName" type="text" name="agentName" class="form-control" placeholder="กรุณาใส่ชื่อ Agent">
+                    </div>
+                    <div class="text-center">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('.dataTable').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false
+        });
+
+        $(".updateAgent").click(function () {
+            var agentId = $(this).data('id')
+            $.ajax({
+                url: '/setting/getAgentById/' + agentId,
+                method: 'GET',
+                success: function (obj) {
+                    $("#agentId").val(obj.agentId);
+                    $("#agentUpdateName").val(obj.agentName);
+                }
+            })
+        })
+    })
+</script>

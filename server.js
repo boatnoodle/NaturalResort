@@ -73,7 +73,7 @@ function isAuthenticated(req, res, next) {
 }
 app.get("/", function(req, res, next) {
   if(req.user){
-    res.render("index", {user : req.user})
+    res.render("coupon", {user : req.user})
   }else{
     res.render("login", {layout: false})
   }

@@ -26,15 +26,16 @@ router.post("/addCoupon", function(req, res, next) {
     checkOut: req.body.checkOut,
     totalDate: req.body.totalDate,
     pax: req.body.pax,
-    remarks: req.body.remarks
+    remarks: req.body.remarks,
+    userId: req.user.userId
   };
-  var sql = `INSERT INTO couponDetail (runNoStart,runNoEnd,agentId,roomNo,checkIn,checkOut,totalDate,pax,remarks) 
+  var sql = `INSERT INTO couponDetail (runNoStart,runNoEnd,agentId,roomNo,checkIn,checkOut,totalDate,pax,remarks,userId) 
               VALUES ('${data.runNoStart}','${data.runNoEnd}','${
     data.agentId
   }','${data.roomNo}','${data.checkIn}'
                       ,'${data.checkOut}','${data.totalDate}','${data.pax}','${
     data.remarks
-  }')`;
+  }','${ data.userId }')`;
   db.query(sql, function(err, rows) {
     if (err) {
       throw err;
@@ -80,7 +81,7 @@ router.post("/addCoupon", function(req, res, next) {
 });
 
 router.get("/getLastedCoupon", function(req, res, next) {
-  var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId WHERE 1 AND type = 1  ORDER BY  couponDetail.couponId DESC`;
+  var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId LEFT JOIN user ON user.userId = couponDetail.userId WHERE 1 AND type = 1  ORDER BY  couponDetail.couponId DESC`;
   db.query(sql, function(err, rows) {
     if (err) {
       throw err;

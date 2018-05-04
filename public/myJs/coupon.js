@@ -175,7 +175,6 @@ $(function() {
             this.runningNo();
         },
         mounted(){
-           
         }
     });
 });

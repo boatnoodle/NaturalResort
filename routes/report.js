@@ -12,5 +12,8 @@ router.get('/reportMonthly', function(req, res, next) {
 
 router.post('/getDataReportDaily', reportController.getDataReportDaily);
 
-router.post('/getDataReportMonthly', reportController.getDataReportMonthly)
+router.post('/getDataReportMonthly', reportController.getDataReportMonthly);
+
+router.post('/getUserPax', reportController.getUserPax)
+
 module.exports = router;

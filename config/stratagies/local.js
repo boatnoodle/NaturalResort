@@ -3,13 +3,13 @@ var LocalStrategy = require("passport-local").Strategy;
 var con = require("../../config/mysql");
 
 module.exports = function() {
-    passport.use("local-singin", new LocalStrategy({
+    passport.use("local-signin", new LocalStrategy({
             usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true
         },
         function(req, username, password, done) {
-            con.query(`SELECT * FROM user WHERE username = '${username}' AND password = ${password}`,
+            con.query(`SELECT * FROM user WHERE username = '${username}' AND password = '${password}'`,
                 function(err, rows) {
                     if (err) {
                         return done(err);

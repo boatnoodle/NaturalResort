@@ -4,66 +4,63 @@
             <i class="fa fa-book"></i> COUPON ISSUE BY MONTHLY
         </h3>
     </section>
-    <section class="content">
+    <section lass="content ">
         <div class="row">
             <div class="col-sm-12">
                 <div class="box">
-                    {{!-- <div class="box-header">
-                        <h3 class="box-title text-center">MONTH/YEAR </h3>
-                    </div> --}}
+                    <h3 style="display: none;" class="text-center titlePrint">
+                        <i class="fa fa-book"></i> COUPON ISSUE BY MONTHLY
+                    </h3>
                     <div class="box-body">
-                        <form v-on:submit.prevent="searchReport" class="form-inline text-center" style="margin: 15px 0;">
-                            <div class="form-group">
-                                <label>MONTH:</label>
-                                <select v-model="optionSearch.month" class="form-control" required="true">
-                                    <option value="">Select Month</option>
-                                    <option v-for="(data,index) in objMonths.nameMonth" :value="objMonths.value[index]">\{{ data }}</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>YEAR: </label>
-                                <select v-model="optionSearch.year" class="form-control" required="true">
-                                    <option value="">Select Year</option>
-                                    <option v-for="data in yearOld" :value="data">\{{ data }}</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-success">SEARCH</button>
-                        </form>
-                        <table class="table table-bordered table-hover text-center">
+                        <div class="section-to-hide">
+                            <form v-on:submit.prevent="searchReport" class="form-inline text-center" style="margin: 15px 0;">
+                                <div class="form-group">
+                                    <label>FROM:</label>
+                                    <input v-model="search.from" type="date" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>TO:</label>
+                                    <input v-model="search.to" type="date" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-success">SEARCH</button>
+                            </form>
+                            <button @click="print" style="margin: 15px 0;" class="btn btn-default btn-sm pull-right">
+                                <i class="fa fa-print"></i> พิมพ์
+                            </button>
+                        </div>
+                        <table id="tableReportMonthly" class="table table-bordered table-hover section-to-print">
                             <thead>
                                 <tr>
-                                    <th>DATE</th>
-                                    <th>TOTAL PAX</th>
-                                    <th>DETAIL</th>
+                                    <th class=" text-center" width="15%">DATE</th>
+                                    <th class=" text-left">AGENT NAME</th>
+                                    <th class=" text-center">PAX</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-show="obj.length > 0" v-for="data in obj">
+                                <template v-for="data in obj">
+                                    <template v-show="data.arr.length > 0" v-for="(data2,index) in data.arr">
+                                        <tr>
+                                            <td v-show="index == 0" class=" text-center">\{{ data.date }}</td>
+                                            <td v-show="index != 0"></td>
+                                            <td>\{{ data2.agentName}}</td>
+                                            <td class=" text-right">\{{ data2.totalPax}}</td>
+                                        </tr>
+                                    </template>
+                                    <tr v-show="data.arr.length <= 0">
+                                        <td class=" text-center">\{{ data.date }}</td>
+                                        <td>-</td>
+                                        <td class=" text-right">0</td>
+                                    </tr>
                                     <tr>
-                                        <td>\{{ data.date }}</td>
-                                        <td>\{{ data.totalPax }}</td>
-                                        <td>
-                                            <button v-show="data.arr.length > 0" @click="openDetail(data.nameClass)" class="btn btn-success btn-sm">
-                                                <i class="fa fa-search"></i>
-                                            </button>
-                                            <span v-show="data.arr.length <= 0">ไม่มีข้อมูล</span>
-                                        </td>
-                                        <table>
-                                            <tr :class="data.nameClass" style="background: yellow; display: none;">
-                                                <th>DATE</th>
-                                                <th>AGENT NAME</th>
-                                                <th>TOTAL PAX</th>
-                                            </tr>
-                                            <tr :class="data.nameClass" style="background: #b5f7a6; display: none;" v-for="data2 in data.arr">
-                                                <td>\{{ data.date }}</td>
-                                                <td>\{{ data2.agentName }}</td>
-                                                <td>\{{ data2.totalPax }}</td>
-                                            </tr>
-                                        </table>
+                                        <th></th>
+                                        <th style=" text-align: center; ">SUB TOTAL</th>
+                                        <th class="text-right">\{{ data.subTotal }}</th>
                                     </tr>
                                 </template>
-                                <tr v-show="obj.length <= 0">
-                                    <td colspan="3">ไม่มีข้อมูล</td>
+                                <tr>
+                                    <th></th>
+                                    <th class="text-center">TOTAL</th>
+                                    <th class="text-right">\{{ obj.total }}</th>
                                 </tr>
                             </tbody>
                         </table>
@@ -73,7 +70,45 @@
         </div>
     </section>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/myJs/reportMonthly.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js "></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js "></script>
+<script src="/myJs/reportMonthly.js "></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js "></script>
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+            /* position: relative !important; */
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .titlePrint {
+            visibility: visible;
+            display: block !important;
+            bottom: 0 !important;
+            padding: 30px 0 !important;
+        }
+        .section-to-hide,
+        .section-to-hide * {
+            display: none !important;
+        }
+        .section-to-print,
+        .section-to-print * {
+            visibility: visible;
+        }
+        /* #section-to-print {
+      position: fixed;
+      width: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+    } */
+        /* #section-to-print h4 {
+      font-size: 30px;
+      font-weight: bold;
+    }
+    #section-to-print h6 {
+      font-size: 24px;
+      font-weight: bold;
+    } */
+    }
+</style>

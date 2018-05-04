@@ -8,18 +8,28 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="box">
-                    {{!-- <div class="box-header">
+                    <h3 style="display: none;" class="text-center titlePrint">
+                        <i class="fa fa-book"></i> DAILY COUPON ISSUE REPORT
+                    </h3>
+                    {{!--
+                    <div class="box-header">
                         <h3 class="box-title text-center">รายงานประจำวันที่ \{{ getDateToday() }}</h3>
                     </div> --}}
                     <div class="box-body">
-                        <form v-on:submit.prevent="getDailyReport" class="form-inline text-center" style="margin: 15px 0;">
-                            <div class="form-group">
-                                <label>DATE:</label>
-                                <input v-model="optionSearch.date" type="date" class="form-control">
-                            </div>
-                            <button type="submit" class="btn btn-success">SEARCH</button>
-                        </form>
-                        <table class="table table-bordered table-hover reportDaily">
+                        <div class="section-to-hide">
+                            <form v-on:submit.prevent="getDailyReport" class="form-inline text-center" style="margin: 15px 0;">
+                                <div class="form-group">
+                                    <label>DATE:</label>
+                                    <input v-model="optionSearch.date" type="date" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-success">SEARCH</button>
+                            </form>
+                            <button @click="print" style="margin: 15px 0;" class="btn btn-default btn-sm pull-right">
+                                <i class="fa fa-print"></i> พิมพ์
+                            </button>
+                        </div>
+                        <div class="clearfix"></div>
+                        <table id="section-to-print" class="table table-bordered table-hover reportDaily">
                             <thead>
                                 <tr>
                                     <th>COUPON ID</th>
@@ -51,12 +61,76 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <h3 class="text-center titlePrint">
+                            <i class="fa fa-users"></i> พนักงานที่ออกคูปอง
+                        </h3>
+                        <table id="section-to-print" class="table bordered table-hover text-center">
+                            <thead>
+                                <tr>
+                                    <th>NAME AGENT</th>
+                                    <th>PAX</th>
+                                    <th>CREATED</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="data in userPaxs">
+                                    <td>\{{ data.name }}</td>
+                                    <td>\{{ data.totalPax }}</td>
+                                    <td>\{{ data.created }}</td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>TOTAL</th>
+                                    <th>\{{ totalPaxs }}</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+<style>
+    @media print {
+    body * {
+      visibility: hidden;
+      /* position: relative !important; */
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .titlePrint{
+        visibility: visible;
+        display: block !important; 
+        bottom: 0 !important;
+        padding: 30px 0 !important;
+    }
+    .section-to-hide,
+    .section-to-hide *{
+        display: none !important;
+    }
+    #section-to-print,
+    #section-to-print * {
+        visibility: visible;
+    }
+    /* #section-to-print {
+      position: fixed;
+      width: 100% !important;
+      top: 0 !important;
+      left: 0 !important;
+    } */
+    /* #section-to-print h4 {
+      font-size: 30px;
+      font-weight: bold;
+    }
+    #section-to-print h6 {
+      font-size: 24px;
+      font-weight: bold;
+    } */
+  }
+</style>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 <script src="/myJs/report.js"></script>

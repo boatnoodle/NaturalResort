@@ -124,6 +124,9 @@
                         <div>
                             <label for="">Remarks: </label> \{{ data.remarks || 'ยังไม่ระบุ' }}
                         </div>
+                        <div>
+                            <label for="">Name: </label> {{ user.name }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -178,6 +181,7 @@
                                     <th>COUPON NO FROM</th>
                                     <th>COUPON NO TO</th>
                                     <th>REMARK</th>
+                                    <th>BY</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -192,6 +196,7 @@
                                     <td>\{{ data.runNoStart }}</td>
                                     <td>\{{ data.runNoEnd }}</td>
                                     <td>\{{ data.remarks || '-' }}</td>
+                                    <td>\{{ data.name || '-' }}</td>
                                 </tr>
                             </tbody>
                         </table>

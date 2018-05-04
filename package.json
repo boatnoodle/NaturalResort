@@ -2,6 +2,9 @@
   "name": "admin-lte",
   "version": "2.3.8",
   "main": "dist/js/app.min.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
   "repository": {
     "type": "git",
     "url": "git://github.com/almasaeed2010/AdminLTE.git"

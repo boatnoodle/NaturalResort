@@ -27,4 +27,11 @@
     font-size: 24px;
     font-weight: bold;
   }
+  #section-to-print.couponEx h3,h4,p{
+    font-size: 13px !important;
+    line-height: 1 !important;
+  }
+  #section-to-print.couponEx .couponDate{
+    padding: 2px !important;
+  }
 }

@@ -1,15 +1,15 @@
-var db = require("../config/mysql");
+var db = require("../config/mysql")
 
 module.exports = {
   getDataReportDaily: function(req, res, next) {
     var date = req.body.date
-    var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId WHERE created LIKE '${date}%' ORDER BY type ASC`;
+    var sql = `SELECT * FROM couponDetail LEFT JOIN agent ON couponDetail.agentId = agent.agentId WHERE created LIKE '${date}%' ORDER BY type ASC`
       console.log(sql)
     db.query(sql, function(err,rows){
       if(err){
-        throw err;
+        throw err
       }else{
-        res.json(rows);
+        res.json(rows)
       }
     })
   },
@@ -21,14 +21,31 @@ module.exports = {
                 FROM couponDetail
                 LEFT JOIN agent ON agent.agentId = couponDetail.agentId
                 WHERE DATE(created) BETWEEN '${from}' AND '${to}' AND type = 1
-                GROUP BY DATE(created),couponDetail.agentId`;
+                GROUP BY DATE(created),couponDetail.agentId`
     db.query(sql ,function(err, rows){
       if(err){
-        throw err;
+        throw err
       }else{
-        res.json(rows);
+        res.json(rows)
       }
     })        
+  },
+  getDataReportRange: function(req, res ,next){
+    var from = req.body.from,
+        to = req.body.to
+
+    var sql = `SELECT  date, COUNT(pax) as amount
+                FROM couponlist
+                LEFT JOIN coupondetail ON couponlist.couponId = coupondetail.couponId
+                WHERE date BETWEEN '${from}' AND '${to}'
+                GROUP BY date`
+    db.query(sql ,function(err, rows){
+      if(err){
+        throw err
+      }else{
+        res.json(rows)
+      }
+    }) 
   },
   getUserPax: function(req, res, next){
     var date = req.body.date
@@ -39,10 +56,10 @@ module.exports = {
                 GROUP BY couponDetail.userId`
     db.query(sql ,function(err, rows){
       if(err){
-        throw err;
+        throw err
       }else{
-        res.json(rows);
+        res.json(rows)
       }
     })  
   }
-};
+}

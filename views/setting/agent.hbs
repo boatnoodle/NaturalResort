@@ -37,6 +37,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>ชื่อ</th>
+                                <th>STATUS</th>
                                 <td class="text-center">จัดการ</td>
                             </tr>
                         </thead>
@@ -45,6 +46,7 @@
                             <tr>
                                 <td>{{ agentId }}</td>
                                 <td>{{ agentName }}</td>
+                                <td>{{ statusName }}</td>
                                 <td width="15%" class="text-center">
                                     <a data-toggle="modal" data-target="#modalUpdateAgent" data-id="{{ agentId }}" class="btn btn-warning btn-sm updateAgent">
                                         <i class="fa fa-pencil"></i> แก้ไข
@@ -78,6 +80,10 @@
                         <label for="">ชื่อ Agent</label>
                         <input type="text" name="agentName" class="form-control" placeholder="กรุณาใส่ชื่อ Agent">
                     </div>
+                    <div class="form-group">
+                        <label for="">Status Walk in</label>
+                        <input type="checkbox" name="statusWalkIn" value="1">
+                    </div>
                     <div class="text-center">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
                         <button type="submit" class="btn btn-primary">บันทึก</button>
@@ -103,6 +109,10 @@
                     <div class="form-group">
                         <label for="">ชื่อ Agent</label>
                         <input id="agentUpdateName" type="text" name="agentName" class="form-control" placeholder="กรุณาใส่ชื่อ Agent">
+                    </div>
+                    <div class="form-group">
+                        <label for="">Status Walk in</label>
+                        <input id="statusWalkIn" type="checkbox" name="statusWalkIn" value="1">
                     </div>
                     <div class="text-center">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">ปิด</button>
@@ -132,6 +142,11 @@
                 success: function (obj) {
                     $("#agentId").val(obj.agentId);
                     $("#agentUpdateName").val(obj.agentName);
+                    if(obj.statusWalkIn == 1){
+                        $("#statusWalkIn").prop('checked', true);
+                    }else{
+                        $("#statusWalkIn").prop('checked', false)
+                    }
                 }
             })
         })

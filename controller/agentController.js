@@ -56,7 +56,9 @@ module.exports = {
     var agentId = req.body.agentId,
         agentName = req.body.agentName,
         statusWalkIn = req.body.statusWalkIn
-        console.log(statusWalkIn)
+        if(statusWalkIn == undefined){
+          statusWalkIn = 0
+        }
     db.query(`UPDATE agent SET agentName = '${ agentName }', statusWalkIn = ${statusWalkIn} WHERE agentId = ${ agentId }`, function(error, rows){
       if (error){
         req.flash("error", "ไม่สามารถแก้ไขข้อมูลตัวแทนได้")

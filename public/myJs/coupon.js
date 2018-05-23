@@ -13,9 +13,12 @@ $(function() {
                 checkOut: '',
                 totalDate: '',
                 pax: '',
-                remarks: ''
+                remarks: '',
+                voucher: ''
             },
-            status: ''
+            status: '',
+            statusVoucher: false,
+            errorDate: false
         },
         methods: {
             runningNo(){
@@ -38,73 +41,75 @@ $(function() {
                 })
             },
             submit(){
-                axios.post('http://localhost:5000/coupon/addCoupon',this.data)
-                .then((result)=>{
+                if(!this.errorDate){
+                    axios.post('http://localhost:5000/coupon/addCoupon',this.data)
+                    .then((result)=>{
 
-                    axios.get('http://localhost:5000/coupon/getLastedCoupon')
-                    .then((result) => {
-                        console.log('fetch lasted coupon')
-                        this.lastedCoupons = result.data;
+                        axios.get('http://localhost:5000/coupon/getLastedCoupon')
+                        .then((result) => {
+                            console.log('fetch lasted coupon')
+                            this.lastedCoupons = result.data;
+                        })
+                        .catch((err) => {
+                            console.log(err)
+                        })
+
+                        var dateObj = new Date(this.data.checkIn);
+                        var start = dateObj.setDate(dateObj.getDate() + 1);
+                        var end = new Date(this.data.checkOut);
+                        var runNo = this.data.runNoStart;
+                        
+                        for(let i = 0; i < this.data.pax; i++){
+
+                            var loop = new Date(start);
+                            while(loop <= end){
+
+                                var dd = loop.getDate();
+                                var mm = loop.getMonth() + 1;
+                                var yyyy = loop.getFullYear();
+
+                                if(dd<10){
+                                    dd='0'+dd;
+                                } 
+                                if(mm<10){
+                                    mm='0'+mm;
+                                } 
+
+                                var date = dd+'/'+mm+'/'+yyyy;
+
+                                document.getElementsByTagName("BODY")[0].onbeforeprint = function() {
+                                    $("#date").text(date)
+                                    $("#runNo").text(runNo)
+                                };
+
+                                window.print();
+                                runNo = parseInt(runNo) + 1;
+                                var newDate = loop.setDate(loop.getDate() + 1);
+                                loop = new Date(newDate);
+                            }
+                        }
+                        this.status = result.data
+                        this.runningNo();
+                        this.data =  {
+                            runNoStart : '',
+                            runNoEnd : '',
+                            agent : '',
+                            roomNo : '',
+                            checkIn : '',
+                            checkOut : '',
+                            totalDate : '',
+                            pax : '',
+                            remarks : ''
+                        }
+                        $("#date,#runNo").text('')
+                        this.$nextTick(() => { // ES6 arrow function
+                            this.$refs.agent.focus();
+                        })
                     })
-                    .catch((err) => {
+                    .catch((err)=>{
                         console.log(err)
                     })
-
-                    var dateObj = new Date(this.data.checkIn);
-                    var start = dateObj.setDate(dateObj.getDate() + 1);
-                    var end = new Date(this.data.checkOut);
-                    var runNo = this.data.runNoStart;
-                    
-                    for(let i = 0; i < this.data.pax; i++){
-
-                        var loop = new Date(start);
-                        while(loop <= end){
-
-                            var dd = loop.getDate();
-                            var mm = loop.getMonth() + 1;
-                            var yyyy = loop.getFullYear();
-
-                            if(dd<10){
-                                dd='0'+dd;
-                            } 
-                            if(mm<10){
-                                mm='0'+mm;
-                            } 
-
-                            var date = dd+'/'+mm+'/'+yyyy;
-
-                            document.getElementsByTagName("BODY")[0].onbeforeprint = function() {
-                                $("#date").text(date)
-                                $("#runNo").text(runNo)
-                            };
-
-                            window.print();
-                            runNo = parseInt(runNo) + 1;
-                            var newDate = loop.setDate(loop.getDate() + 1);
-                            loop = new Date(newDate);
-                        }
-                    }
-                    this.status = result.data
-                    this.runningNo();
-                    this.data =  {
-                        runNoStart : '',
-                        runNoEnd : '',
-                        agent : '',
-                        roomNo : '',
-                        checkIn : '',
-                        checkOut : '',
-                        totalDate : '',
-                        pax : '',
-                        remarks : ''
-                    }
-                    $("#date,#runNo").text('')
-                    this.$nextTick(() => { // ES6 arrow function
-                        this.$refs.agent.focus();
-                    })
-                })
-                .catch((err)=>{
-                    console.log(err)
-                })
+                }
             },
             getStringDate(isoDate){
                 return moment(isoDate).format('DD/MM/YYYY')
@@ -166,7 +171,29 @@ $(function() {
         },
         watch: {
             "data.agent"(val){
-                // this.agentName = val;
+                if(val.statusWalkIn){
+                    this.statusVoucher = true
+                }else{
+                    this.statusVoucher = false
+                }
+            },
+            "data.checkIn"(val){
+                var dateCheckIn = moment(val),
+                    dateCheckOut = moment(this.data.checkOut)
+                    if(dateCheckIn != '' && dateCheckOut != '' && dateCheckOut <= dateCheckIn){
+                        this.errorDate = true
+                    }else{
+                        this.errorDate = false
+                    }
+            },
+            "data.checkOut"(val){
+                var dateCheckOut = moment(val),
+                    dateCheckIn = moment(this.data.checkIn)
+                    if(dateCheckIn != '' && dateCheckOut != '' && dateCheckOut <= dateCheckIn){
+                        this.errorDate = true
+                    }else{
+                        this.errorDate = false
+                    }
             }
         },
         created(){

@@ -30,14 +30,18 @@
                             </div>
                             <div class="form-group">
                                 <label>Agent</label>
-                                <select id="agent" ref="agent" class="form-control" v-model="data.agent">
+                                <select id="agent" ref="agent" class="form-control" v-model="data.agent" required="true">
                                     <option value="">Select Agent</option>
                                     <option v-for="data in datas" :value="data">\{{ data.agentName }}</option>
                                 </select>
                             </div>
+                            <div v-show="statusVoucher" class="form-group">
+                                <label>Voucher</label>
+                                <input v-model="data.voucher" type="number" class="form-control" placeholder="Enter Room Number"  required="true">
+                            </div>
                             <div class="form-group">
                                 <label>Room Number</label>
-                                <input v-model="data.roomNo" type="number" class="form-control" placeholder="Enter Room Number">
+                                <input v-model="data.roomNo" type="number" class="form-control" placeholder="Enter Room Number" required="true">
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -47,7 +51,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input v-model="data.checkIn" type="date" class="form-control pull-right" id="checkIn" placeholder="Select Date checkIn">
+                                            <input v-model="data.checkIn" type="date" class="form-control pull-right" id="checkIn" placeholder="Select Date checkIn" required="true">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -56,8 +60,11 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-calendar"></i>
                                             </div>
-                                            <input v-model="data.checkOut" type="date" class="form-control pull-right" id="checkOut" placeholder="Select Date checkOut">
+                                            <input v-model="data.checkOut" type="date" class="form-control pull-right" id="checkOut" placeholder="Select Date checkOut" required="true">
                                         </div>
+                                    </div>
+                                    <div v-show="errorDate" class="col-sm-12">
+                                        <p style="color: red">วันที่ที่คุณเลือกไม่ถูกต้องกรุณาตรวจสอบอีกครั้ง</p>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +76,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <label>Pax</label>
-                                        <input v-model="data.pax" type="number" class="form-control" placeholder="Enter Pax">
+                                        <input v-model="data.pax" type="number" class="form-control" placeholder="Enter Pax" required="true">
                                     </div>
                                 </div>
                             </div>
@@ -138,8 +145,11 @@
                     </div>
                     <div class="box-body text-center">
                         <div id="section-to-print" class="couponEx">
-                            {{!-- <h3>The Natural Resort</h3> --}}
-                            <div><img src="/image/logo.png" alt="" srcset=""></div>
+                            {{!--
+                            <h3>The Natural Resort</h3> --}}
+                            <div>
+                                <img src="/image/logo.png" alt="" srcset="">
+                            </div>
                             <p class="text-right">No.
                                 <span id="runNo">xxxxxxxxxxxx</span>
                             </p>

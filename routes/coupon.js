@@ -27,15 +27,12 @@ router.post("/addCoupon", function(req, res, next) {
     totalDate: req.body.totalDate,
     pax: req.body.pax,
     remarks: req.body.remarks,
-    userId: req.user.userId
+    userId: req.user.userId,
+    voucher: req.body.voucher
   };
-  var sql = `INSERT INTO couponDetail (runNoStart,runNoEnd,agentId,roomNo,checkIn,checkOut,totalDate,pax,remarks,userId) 
-              VALUES ('${data.runNoStart}','${data.runNoEnd}','${
-    data.agentId
-  }','${data.roomNo}','${data.checkIn}'
-                      ,'${data.checkOut}','${data.totalDate}','${data.pax}','${
-    data.remarks
-  }','${ data.userId }')`;
+  var sql = `INSERT INTO couponDetail (runNoStart,runNoEnd,agentId,roomNo,checkIn,checkOut,totalDate,pax,remarks,userId,voucher) 
+              VALUES ('${data.runNoStart}','${data.runNoEnd}','${data.agentId}','${data.roomNo}','${data.checkIn}'
+                      ,'${data.checkOut}','${data.totalDate}','${data.pax}','${data.remarks}','${ data.userId }',${ data.voucher })`;
   db.query(sql, function(err, rows) {
     if (err) {
       throw err;
